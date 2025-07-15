@@ -1,0 +1,477 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+  <title>PHEONIX ZEUTRON PANEL</title>
+  <link href="https://fonts.googleapis.com/css2?family=El+Messiri&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    body {
+      font-family: 'El Messiri', sans-serif;
+      background: #f7f4ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 15px;
+    }
+
+    .panel {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(123, 63, 228, 0.1);
+      width: 100%;
+      max-width: 500px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #7b3fe4;
+      font-family: 'El Messiri', sans-serif;
+      font-size: 24px;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    h2 i {
+      margin-right: 8px;
+    }
+
+    .input-group {
+  position: relative;
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.input-group i {
+  position: absolute;
+  top: 50%;
+  left: 14px;
+  transform: translateY(-50%);
+  color: #a578f9;
+  pointer-events: none; /* so clicks go to input */
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  font-family: 'El Messiri', sans-serif;
+  border-radius: 12px;
+  border: 1.8px solid #d4b6f5;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+}
+
+
+    .btn {
+      background: linear-gradient(to right, #7b3fe4, #a578f9);
+      color: white;
+      border: none;
+      padding: 14px;
+      width: 100%;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: 'El Messiri', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(123, 63, 228, 0.3);
+      margin-top: 10px;
+    }
+
+    .result-box {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(123, 63, 228, 0.08);
+      max-width: 500px;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+
+    .result-box h3 {
+      font-size: 20px;
+      color: #7b3fe4;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .result-row {
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #eee;
+      padding-bottom: 6px;
+    }
+
+    .result-label {
+      font-weight: 600;
+      color: #444;
+    }
+
+    .result-value {
+      color: #7b3fe4;
+      font-weight: 500;
+    }
+
+    /* Keys List */
+
+    #keysList {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(123, 63, 228, 0.08);
+      max-width: 700px;
+      width: 100%;
+    }
+
+    #keysList h3 {
+      font-size: 22px;
+      color: #7b3fe4;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .key-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .key-info {
+      flex: 1;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .key-info > div {
+      min-width: 120px;
+      max-width: 180px;
+    }
+
+    .key-label {
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    .status-toggle {
+      cursor: pointer;
+      color: #7b3fe4;
+      font-weight: 600;
+      user-select: none;
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1.5px solid #7b3fe4;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .status-toggle.used {
+      background-color: #7b3fe4;
+      color: white;
+    }
+
+    .btn-delete {
+      background: #e03e3e;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.85rem;
+      box-shadow: 0 3px 8px rgba(224, 62, 62, 0.5);
+      transition: background-color 0.3s;
+    }
+
+    .btn-delete:hover {
+      background-color: #b93232;
+    }
+    
+    .btn i {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+    .popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+}
+
+.popup.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup-content {
+  position: relative;
+  background: white;
+  padding: 25px 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(123, 63, 228, 0.15);
+  font-family: 'El Messiri', sans-serif;
+  color: #7b3fe4;
+  font-size: 18px;
+  text-align: center;
+  max-width: 320px;
+  width: 100%;
+}
+
+.popup-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 22px;
+  color: #a578f9;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.popup-close:hover {
+  color: #7b3fe4;
+}
+
+.popup-content button {
+  margin-top: 20px;
+  background: linear-gradient(to right, #7b3fe4, #a578f9);
+  border: none;
+  color: white;
+  padding: 10px 25px;
+  font-size: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 6px 15px rgba(123, 63, 228, 0.3);
+}
+
+
+
+
+  </style>
+</head>
+<body>
+  
+   <div id="popup" class="popup">
+  <div class="popup-content">
+    <span class="popup-close" id="popupCloseIcon">&times;</span>
+    <p id="popupMessage">Please enter correct device id</p>
+    <button id="popupCloseBtn">OK</button>
+  </div>
+</div>
+
+
+
+
+  <div class="panel">
+    <h2><i class="fas fa-cogs"></i>PHEONIX ZEUTRON PANEL</h2>
+
+    <div class="input-group">
+      <i class="fas fa-user"></i>
+      <input type="text" id="deviceId" placeholder="Enter Device ID" />
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-key"></i>
+      <input type="text" id="manualKey" placeholder="Manual Key (Optional)" />
+    </div>
+
+    <div class="input-group">
+      <i class="fas fa-calendar-day"></i>
+      <input type="number" id="expiryDays" placeholder="Duration (in days)" />
+    </div>
+
+    <button class="btn" onclick="generateKey()">
+  <i class="fas fa-key"></i> GENERATE KEY
+</button>
+  </div>
+
+  <div class="result-box" id="resultBox" style="display: none;">
+    <h3><i class="fas fa-shield-alt"></i> KEY INFORMATION</h3>
+    <div class="result-row">
+      <div class="result-label">Device ID:</div>
+      <div class="result-value" id="resDeviceId">-</div>
+    </div>
+    <div class="result-row">
+      <div class="result-label">License Key:</div>
+      <div class="result-value" id="resKey">-</div>
+    </div>
+    <div class="result-row">
+      <div class="result-label">Status:</div>
+      <div class="result-value" id="resStatus">Not Used</div>
+    </div>
+    <div class="result-row">
+      <div class="result-label">Expires On:</div>
+      <div class="result-value" id="resExpiry">-</div>
+    </div>
+  </div>
+
+  <div id="keysList" style="display:none;">
+    <h3><i class="fas fa-list"></i> ALL KEYS</h3>
+    <div id="keysContainer"></div>
+  </div>
+
+  <script>
+    
+    function generateKey() {
+      const deviceId = document.getElementById("deviceId").value.trim();
+      const manualKey = document.getElementById("manualKey").value.trim();
+      const days = parseInt(document.getElementById("expiryDays").value.trim());
+
+      if (!deviceId || isNaN(days) || days < 1) {
+  // alert("Please enter valid Device ID and duration.");
+  showPopup("Please enter correct device id");
+  return;
+}
+
+      function showPopup(message) {
+  const popup = document.getElementById('popup');
+  document.getElementById('popupMessage').innerText = message;
+  popup.classList.add('show');
+}
+
+document.getElementById('popupCloseBtn').addEventListener('click', () => {
+  document.getElementById('popup').classList.remove('show');
+});
+
+document.getElementById('popupCloseIcon').addEventListener('click', () => {
+  document.getElementById('popup').classList.remove('show');
+});
+
+
+      
+      const generatedKey = manualKey || 'PHX-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+      const expiryDate = new Date(Date.now() + days * 86400000);
+
+      const formattedExpiry = expiryDate.toLocaleDateString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric'
+      });
+
+      const stored = JSON.parse(localStorage.getItem("deviceKeys") || "{}");
+      stored[deviceId] = {
+        key: generatedKey,
+        expiry: expiryDate.getTime(),
+        used: false
+      };
+      localStorage.setItem("deviceKeys", JSON.stringify(stored));
+
+  
+      document.getElementById("resDeviceId").innerText = deviceId;
+      document.getElementById("resKey").innerText = generatedKey;
+      document.getElementById("resStatus").innerText = "Not Used";
+      document.getElementById("resExpiry").innerText = formattedExpiry;
+      document.getElementById("resultBox").style.display = "block";
+
+
+      renderAllKeys();
+    }
+    function renderAllKeys() {
+      const container = document.getElementById("keysContainer");
+      const keysListDiv = document.getElementById("keysList");
+      const deviceKeys = JSON.parse(localStorage.getItem("deviceKeys") || "{}");
+
+      container.innerHTML = "";
+
+      const keys = Object.entries(deviceKeys);
+      if (keys.length === 0) {
+        keysListDiv.style.display = "none";
+        return;
+      }
+      keysListDiv.style.display = "block";
+
+      keys.forEach(([deviceId, data]) => {
+        const expiryDate = data.expiry ? new Date(data.expiry) : null;
+        const expiryText = expiryDate ? expiryDate.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) : 'No expiry';
+
+        const keyItem = document.createElement("div");
+        keyItem.className = "key-item";
+   
+        const keyInfo = document.createElement("div");
+        keyInfo.className = "key-info";
+ 
+        const devDiv = document.createElement("div");
+        devDiv.innerHTML = `<div class="key-label">Device ID</div><div>${deviceId}</div>`;
+       
+        const keyDiv = document.createElement("div");
+        keyDiv.innerHTML = `<div class="key-label">License Key</div><div>${data.key}</div>`;
+
+    
+        const statusDiv = document.createElement("div");
+        statusDiv.innerHTML = `<div class="key-label">Status</div>`;
+        const statusToggle = document.createElement("span");
+        statusToggle.className = "status-toggle" + (data.used ? " used" : "");
+        statusToggle.textContent = data.used ? "Used" : "Not Used";
+        statusToggle.title = "Click to toggle status";
+        statusToggle.onclick = () => {
+          toggleUsage(deviceId);
+        };
+        statusDiv.appendChild(statusToggle);
+
+      
+        const expiryDiv = document.createElement("div");
+        expiryDiv.innerHTML = `<div class="key-label">Expires On</div><div>${expiryText}</div>`;
+
+        keyInfo.appendChild(devDiv);
+        keyInfo.appendChild(keyDiv);
+        keyInfo.appendChild(statusDiv);
+        keyInfo.appendChild(expiryDiv);
+
+  
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "btn-delete";
+        deleteBtn.title = "Delete this key";
+        deleteBtn.innerHTML = `<i class="fas fa-trash"></i>`;
+        deleteBtn.onclick = () => {
+          if (confirm(`Delete key for Device ID: ${deviceId}?`)) {
+            deleteKey(deviceId);
+          }
+        };
+
+        keyItem.appendChild(keyInfo);
+        keyItem.appendChild(deleteBtn);
+
+        container.appendChild(keyItem);
+      });
+    }
+
+    function toggleUsage(deviceId) {
+      const stored = JSON.parse(localStorage.getItem("deviceKeys") || "{}");
+      if (stored[deviceId]) {
+        stored[deviceId].used = !stored[deviceId].used;
+        localStorage.setItem("deviceKeys", JSON.stringify(stored));
+        renderAllKeys();
+      }
+    }
+
+    function deleteKey(deviceId) {
+      const stored = JSON.parse(localStorage.getItem("deviceKeys") || "{}");
+      if (stored[deviceId]) {
+        delete stored[deviceId];
+        localStorage.setItem("deviceKeys", JSON.stringify(stored));
+        renderAllKeys();
+      }
+    }
+    window.onload = () => {
+      renderAllKeys();
+    };
+  </script>
+
+</body>
+</html>
